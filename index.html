@@ -17,16 +17,29 @@
     </header>
 
     <main>
-        <section class="upload-section">
+        <section id="upload-section">
             <div class="upload">
-              
-                <!-- <input type="text"> -->
+                <label for="input-image" id="drop-area">
+                    <input type="file" accept="image/*" id="input-image" hidden>
+                    <div id="selected-img">
+                        <img src="./img/upload1.png" alt="selected image" id="view-img">
+                        
+                        <p>Drag and Drop or Click here <br> to upload image</p>
+                        <span>upload any image from desktop</span>
+                    </div>
+                </label>
+                <button id="upload-btn" onclick="initializeCanvasWithUploadedImage()">Upload</button>
             </div>
+        </section>
+
+        <section id="canvas-section">
+            <div class=""></div>
         </section>
     </main>
 
     <footer>
         <p>Made with &#10084;&#65039; by Harsh</p>
     </footer>
+    <script src="./script/script.js"></script>
 </body>
 </html>
