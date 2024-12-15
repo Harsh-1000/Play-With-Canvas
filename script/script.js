@@ -1,4 +1,4 @@
-import { Circle } from "./shape.js";
+import { Circle, Square } from "./shape.js";
 
 const dropArea = document.getElementById('drop-area');
 const imageFile = document.getElementById('input-image');
@@ -8,6 +8,7 @@ const canvasSection = document.getElementById('canvas-section');
 const uploadImage = document.getElementById('upload-btn');
 const imageForCanvas = document.getElementById('image-for-canvas');
 const drawCircle = document.getElementById('draw-circle');
+const drawSquare = document.getElementById('draw-square');
 const canvasImg = document.getElementById('canvas-img');
 const clearCanvasArea = document.getElementById('clear-canvas');
 
@@ -46,6 +47,8 @@ imageForCanvas.addEventListener('click',newImage);
 
 drawCircle.addEventListener('click',drawCircleOnCanvas);
 
+drawSquare.addEventListener('click',drawSquareOnCanvas);
+
 canvas.addEventListener('click',getPointerCoordinate);
 
 clearCanvasArea.addEventListener('click',clearCanvas);
@@ -64,36 +67,20 @@ function getPointerCoordinate(event)
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    
-
 
     for(let i = shapes.length-1;i>=0;i--)
     {
         let shape = shapes[i];
-        
         console.log(shape);
         console.log(`Canvas Width: ${canvas.width}, Canvas Height: ${canvas.height}`);
-        let centerX = shape.getCircleCenterCoordinateX();
-        let centerY = shape.getCircleCenterCoordinateY();
-        let radius = shape.getRadius();
-    
         console.log(`Mouse Clicked at: x = ${x}, y = ${y}`);
-
-        
-        const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
-
-        
-        console.log(`Distance from center: ${distance}`);
-
-        
-        if (distance <= radius) {
+        if (shape.isShapeSelected(x,y)) {
             shapes.splice(i,1);
             shapes.push(shape);
             selectedShape = shape;
-            enableCircleMovement(); 
+            enableShapeMovement(); 
             break;
         } else {
-           
             selectedShape=null;
         }
     }
@@ -133,45 +120,49 @@ function drawCircleOnCanvas()
 {
     const circleShape = new Circle(canvas.width,canvas.height);
     shapes.push(circleShape);
-    circleShape.drawCircle(ctx);
+    circleShape.drawShape(ctx);
 }
 
+function drawSquareOnCanvas()
+{
+    const squareShape = new Square(canvas.width,canvas.height);
+    shapes.push(squareShape);
+    squareShape.drawShape(ctx);
+}
 
-
-function enableCircleMovement() {
+function enableShapeMovement() {
 
     window.removeEventListener('keydown',moveListner);
 
     moveListner = (event) =>
         {
             if (selectedShape) { 
-                moveCircle(event,selectedShape);
+                moveShape(event,selectedShape);
             }
            
         }
-    
     window.addEventListener('keydown',moveListner);
 }
 
-function moveCircle(event,circle) {
+function moveShape(event,shape) {
    
     // circle = shapes[0];
     console.log('key pressed');
-    let centerX = circle.getCircleCenterCoordinateX();
-    let centerY = circle.getCircleCenterCoordinateY();
+    let centerX = shape.getCoordinateX();
+    let centerY = shape.getCoordinateY();
     
     switch (event.key) {
         case 'ArrowUp':
-            circle.setCircleCenter(centerX, centerY - 5); 
+            shape.setShapeCoordinate(centerX, centerY - 5); 
             break;
         case 'ArrowDown':
-            circle.setCircleCenter(centerX, centerY + 5);
+            shape.setShapeCoordinate(centerX, centerY + 5);
             break;
         case 'ArrowLeft':
-            circle.setCircleCenter(centerX - 5, centerY); 
+            shape.setShapeCoordinate(centerX - 5, centerY); 
             break;
         case 'ArrowRight':
-            circle.setCircleCenter(centerX + 5, centerY); 
+            shape.setShapeCoordinate(centerX + 5, centerY); 
             break;
         default:
             return; 
@@ -182,17 +173,12 @@ function moveCircle(event,circle) {
 
 function redrawShapes() {
     clearCanvas();
-    drawShapes();
+    drawShapesOnCanvas();
 }
 
-function drawShapes() {
-    
-    // for(let i=0;i<shapes.length;i++)
-    // {
-    //     shape[i].drawCircle(ctx,canvas.width,canvas.height); 
-    // }
+function drawShapesOnCanvas() {
     shapes.forEach(shape =>{
-        shape.drawCircle(ctx);
+        shape.drawShape(ctx);
     })
 
 }

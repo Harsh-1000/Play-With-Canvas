@@ -30,7 +30,7 @@ class Circle
         this.#strokeColor=generateUniqueRandomColor();
     }
 
-    drawCircle(ctx)
+    drawShape(ctx)
     {
        
         ctx.beginPath();
@@ -43,7 +43,7 @@ class Circle
         ctx.stroke();
     }
 
-    drawCircleIsPossible(x,y)
+    isCirclePossible(x,y)
     {
         if (x- this.#radius >= 0 && 
             x + this.#radius <= canvas.width &&
@@ -55,29 +55,113 @@ class Circle
         return false;
     }
 
-    getCircleCenterCoordinateX()
+    getCoordinateX()
     {
         return this.#centerX; 
     }
 
-    getCircleCenterCoordinateY()
+    getCoordinateY()
     {
         return this.#centerY; 
     }
 
-    getRadius()
+    setShapeCoordinate(x,y)
     {
-        return this.#radius;
-    }
-
-    setCircleCenter(x,y)
-    {
-        if(this.drawCircleIsPossible(x,y))
+        if(this.isCirclePossible(x,y))
         {
             this.#centerX = x;
             this.#centerY = y;
         }
     }
+
+    isShapeSelected(pointerX,pointerY)
+    {
+        const distance = Math.sqrt(Math.pow(pointerX - this.#centerX, 2) + Math.pow(pointerY - this.#centerY, 2));
+
+        if(distance <= this.#radius)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
 
-export {Circle};
+class Square
+{
+    #x;
+    #y;
+    #size;
+    #lineWidth;
+    #strokeColor;
+    #canvasWidth;
+    #canvasHeigth;
+
+    constructor(canvasWidth,canvasHeight)
+    {
+        this.#size = canvas.width * 0.1; 
+        this.#lineWidth = canvas.width * 0.007; 
+        this.#canvasWidth=canvasWidth;
+        this.#canvasHeigth = canvasHeight;
+        this.#x = Math.floor(Math.random() * (canvasWidth - this.#size)); 
+        this.#y = Math.floor(Math.random() * (canvasHeight - this.#size));
+        this.#strokeColor=generateUniqueRandomColor();
+    }
+
+    drawShape(ctx)
+    {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'; 
+        ctx.fillRect(this.#x, this.#y, this.#size, this.#size); 
+    
+        let gradient = ctx.createLinearGradient(this.#x, this.#y, this.#x + this.#size, this.#y + this.#size);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');  
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');  
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(this.#x, this.#y, this.#size, this.#size);
+    
+        ctx.strokeStyle = this.#strokeColor;  
+        ctx.lineWidth = this.#lineWidth;  
+        ctx.strokeRect(this.#x, this.#y, this.#size, this.#size);  
+    }
+
+    isShapeSelected(pointerX,pointerY)
+    {
+        return pointerX >= this.#x && pointerX <= this.#x + this.#size &&
+        pointerY >= this.#y && pointerY <= this.#y + this.#size;
+
+    }
+
+    isSquarePossible(x,y)
+    {
+        if (x >= 0 && 
+            x + this.#size <= this.#canvasWidth && 
+            y >= 0 && 
+            y + this.#size <= this.#canvasHeigth) {
+            return true;
+        }
+        return false;
+    }
+
+    setShapeCoordinate(x,y)
+    {
+        if(this.isSquarePossible(x,y))
+        {
+            this.#x = x;
+            this.#y = y;
+        }
+    }
+    
+    getCoordinateX()
+    {
+        return this.#x; 
+    }
+
+    getCoordinateY()
+    {
+        return this.#y; 
+    }
+
+}
+
+export {Circle,Square};
