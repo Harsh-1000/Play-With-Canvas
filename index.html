@@ -28,18 +28,28 @@
                         <span>upload any image from desktop</span>
                     </div>
                 </label>
-                <button id="upload-btn" onclick="initializeCanvasWithUploadedImage()">Upload</button>
+                <button id="upload-btn">Upload</button>
             </div>
         </section>
 
         <section id="canvas-section">
-            <div class=""></div>
+            <div class="canvas-conatiner">
+                <div id="canvas-img">
+                    <canvas id="canvas">
+
+                    </canvas>
+                </div>
+                <div id="canvas-menu"> 
+                    <button class="canvas-button" id="image-for-canvas">New Image</button>
+                    <button class="canvas-button" id="draw-circle">Circle</button>
+                </div>
+            </div>
         </section>
     </main>
 
     <footer>
         <p>Made with &#10084;&#65039; by Harsh</p>
     </footer>
-    <script src="./script/script.js"></script>
+    <script type="module" src="./script/script.js"></script>
 </body>
 </html>
