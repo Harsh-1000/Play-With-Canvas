@@ -9,7 +9,7 @@ const uploadImage = document.getElementById('upload-btn');
 const imageForCanvas = document.getElementById('image-for-canvas');
 const drawCircle = document.getElementById('draw-circle');
 const canvasImg = document.getElementById('canvas-img');
-
+const clearCanvasArea = document.getElementById('clear-canvas');
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -18,6 +18,9 @@ imageFile.addEventListener('change',selectImage);
 
 var imgLink = null;
 var shapes = [];
+var selectedShape = null;
+var moveListner = null;
+
 
 function selectImage()
 {
@@ -45,6 +48,8 @@ drawCircle.addEventListener('click',drawCircleOnCanvas);
 
 canvas.addEventListener('click',getPointerCoordinate);
 
+clearCanvasArea.addEventListener('click',clearCanvas);
+
 window.addEventListener('resize', () =>
     {
         location.reload();
@@ -59,29 +64,40 @@ function getPointerCoordinate(event)
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-
-    let shape = shapes[0];
-    console.log(shape);
-    console.log(`Canvas Width: ${canvas.width}, Canvas Height: ${canvas.height}`);
-    let centerX = shape.getCircleCenterCoordinateX();
-    let centerY = shape.getCircleCenterCoordinateY();
-    let radius = shape.getRadius();
-   
-    console.log(`Mouse Clicked at: x = ${x}, y = ${y}`);
-
     
-    const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
 
-    
-    console.log(`Distance from center: ${distance}`);
 
-    
-    if (distance <= radius) {
+    for(let i = shapes.length-1;i>=0;i--)
+    {
+        let shape = shapes[i];
         
-        enableCircleMovement(); 
-    } else {
-        alert('Click is outside the circle!');
+        console.log(shape);
+        console.log(`Canvas Width: ${canvas.width}, Canvas Height: ${canvas.height}`);
+        let centerX = shape.getCircleCenterCoordinateX();
+        let centerY = shape.getCircleCenterCoordinateY();
+        let radius = shape.getRadius();
+    
+        console.log(`Mouse Clicked at: x = ${x}, y = ${y}`);
+
+        
+        const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+
+        
+        console.log(`Distance from center: ${distance}`);
+
+        
+        if (distance <= radius) {
+            shapes.splice(i,1);
+            shapes.push(shape);
+            selectedShape = shape;
+            enableCircleMovement(); 
+            break;
+        } else {
+           
+            selectedShape=null;
+        }
     }
+    
 }
 
 function initializeCanvasWithUploadedImage()
@@ -123,18 +139,27 @@ function drawCircleOnCanvas()
 
 
 function enableCircleMovement() {
+
+    window.removeEventListener('keydown',moveListner);
+
+    moveListner = (event) =>
+        {
+            if (selectedShape) { 
+                moveCircle(event,selectedShape);
+            }
+           
+        }
     
-    window.addEventListener('keydown',moveCircle);
+    window.addEventListener('keydown',moveListner);
 }
 
 function moveCircle(event,circle) {
    
-    circle = shapes[0];
+    // circle = shapes[0];
     console.log('key pressed');
     let centerX = circle.getCircleCenterCoordinateX();
     let centerY = circle.getCircleCenterCoordinateY();
-    let radius = circle.getRadius();
-
+    
     switch (event.key) {
         case 'ArrowUp':
             circle.setCircleCenter(centerX, centerY - 5); 
@@ -162,6 +187,12 @@ function redrawShapes() {
 
 function drawShapes() {
     
-    let shape = shapes[0]; 
-    shape.drawCircle(ctx,canvas.width,canvas.height); 
+    // for(let i=0;i<shapes.length;i++)
+    // {
+    //     shape[i].drawCircle(ctx,canvas.width,canvas.height); 
+    // }
+    shapes.forEach(shape =>{
+        shape.drawCircle(ctx);
+    })
+
 }

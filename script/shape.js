@@ -22,8 +22,6 @@ class Circle
 
     constructor(canvasWidth,canvasHeight)
     {
-        // this.#radius=60;
-        // this.#lineWidth=6;
         this.#radius = canvas.width * 0.06; 
         this.#lineWidth = canvas.width * 0.007; 
         this.#centerX = Math.floor(Math.random() * (canvasWidth - 2 * this.#radius)) + this.#radius;
