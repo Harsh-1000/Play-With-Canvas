@@ -188,6 +188,7 @@ function newImage()
     clearCanvas();
     shapes=[];
     imgLink=null;
+    selectedImg.src = './img/upload1.png';
     canvasSection.style.display='none';
     uploadSection.style.display='block';
 }
