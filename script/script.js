@@ -105,7 +105,7 @@ function initializeCanvasWithUploadedImage()
     canvas.height = canvasHeight; 
     if(imgLink===null)
     {
-        imgLink = '/img/default.jpg';
+        imgLink = './img/default.jpg';
     }
     drawImage(imgLink);
 
