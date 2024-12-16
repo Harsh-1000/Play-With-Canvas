@@ -85,7 +85,7 @@ canvas.addEventListener('click',getPointerCoordinate);
 /**
  * Event listener to clear the canvas screen on click event
  */
-clearCanvasArea.addEventListener('click',clearCanvas);
+clearCanvasArea.addEventListener('click',clearScreen);
 
 /**
  * Event listener to reset the page state on click event
@@ -117,6 +117,15 @@ function selectImage()
 */
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
+}
+
+/**
+ * to reset the canvas
+ */
+function clearScreen()
+{
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    shapes = [];
 }
 
 /**
