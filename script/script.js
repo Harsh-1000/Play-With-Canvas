@@ -15,19 +15,13 @@ const clearCanvasArea = document.getElementById('clear-canvas');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-imageFile.addEventListener('change',selectImage);
-
 var imgLink = null;
 var shapes = [];
 var selectedShape = null;
 var moveListner = null;
 
 
-function selectImage()
-{
-    imgLink = URL.createObjectURL(imageFile.files[0]);
-    selectedImg.src = imgLink;
-}
+imageFile.addEventListener('change',selectImage);
 
 dropArea.addEventListener('dragover', (event) =>
 {
@@ -55,8 +49,22 @@ clearCanvasArea.addEventListener('click',clearCanvas);
 
 window.addEventListener('resize', () =>
     {
-        location.reload();
+        if(imgLink!==null)
+        {   
+            clearCanvas();
+            shapes = [];
+            canvas.width=0;
+            canvas.height=0;
+            initializeCanvasWithUploadedImage();
+        }
+
     });
+
+function selectImage()
+{
+    imgLink = URL.createObjectURL(imageFile.files[0]);
+    selectedImg.src = imgLink;
+}
 
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height); 
@@ -95,6 +103,10 @@ function initializeCanvasWithUploadedImage()
     const canvasHeight = canvas.offsetHeight;
     canvas.width = canvasWidth; 
     canvas.height = canvasHeight; 
+    if(imgLink===null)
+    {
+        imgLink = '../img/default.jpg';
+    }
     drawImage(imgLink);
 
 }
@@ -103,6 +115,7 @@ function newImage()
 {
     clearCanvas();
     shapes=[];
+    imgLink=null;
     canvasSection.style.display='none';
     uploadSection.style.display='block';
 }
@@ -145,8 +158,7 @@ function enableShapeMovement() {
 }
 
 function moveShape(event,shape) {
-   
-    // circle = shapes[0];
+
     console.log('key pressed');
     let centerX = shape.getCoordinateX();
     let centerY = shape.getCoordinateY();
