@@ -1,5 +1,12 @@
+/**
+ * use to store unique color code
+ */
 const shapeColorSet = new Set();
 
+/**
+ * it generate and return the unique color code
+ * @returns color code
+ */
 function generateUniqueRandomColor() {
   let color;
   do {
@@ -12,6 +19,9 @@ function generateUniqueRandomColor() {
   return color;  
 }
 
+/**
+ * Represents a circle shape that can be drawn on a canvas.
+ */
 class Circle
 {
     #radius;
@@ -20,6 +30,12 @@ class Circle
     #centerX;
     #centerY;
 
+    /**
+     * Creates a new Circle object with random position and predefined size and stroke.
+     * 
+     * @param {number} canvasWidth - The width of the canvas where the circle will be drawn.
+     * @param {number} canvasHeight - The height of the canvas where the circle will be drawn.
+     */
     constructor(canvasWidth,canvasHeight)
     {
         this.#radius = canvas.width * 0.06; 
@@ -30,6 +46,12 @@ class Circle
         this.#strokeColor=generateUniqueRandomColor();
     }
 
+     /**
+     * Draws the circle on the given canvas context.
+     * The circle is filled with a semi-transparent white color and has a defined stroke color and width.
+     * 
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context on which to draw the circle.
+     */
     drawShape(ctx)
     {
        
@@ -43,6 +65,13 @@ class Circle
         ctx.stroke();
     }
 
+     /**
+     * Checks wether the circle is within the canvas or not
+     * 
+     * @param {number} x - The x-coordinate of the point to check.
+     * @param {number} y - The y-coordinate of the point to check.
+     * @returns {boolean} - Returns `true` if the circle is inside the canvas, `false` otherwise.
+     */
     isCirclePossible(x,y)
     {
         if (x- this.#radius >= 0 && 
@@ -55,16 +84,32 @@ class Circle
         return false;
     }
 
+    /**
+     * Gets the x-coordinate of the circle's center.
+     * 
+     * @returns {number} - The x-coordinate of the circle's center.
+     */
     getCoordinateX()
     {
         return this.#centerX; 
     }
 
+    /**
+     * Gets the y-coordinate of the circle's center.
+     * 
+     * @returns {number} - The y-coordinate of the circle's center.
+     */
     getCoordinateY()
     {
         return this.#centerY; 
     }
 
+    /**
+     * Sets the circle's center to new coordinates (x, y), if the new coordinates are valid.
+     * 
+     * @param {number} x - The new x-coordinate for the circle's center.
+     * @param {number} y - The new y-coordinate for the circle's center.
+     */
     setShapeCoordinate(x,y)
     {
         if(this.isCirclePossible(x,y))
@@ -74,6 +119,13 @@ class Circle
         }
     }
 
+     /**
+     * Checks if the shape is selected based on a given pointer (mouse) position.
+     * 
+     * @param {number} pointerX - The x-coordinate of the pointer (mouse) position.
+     * @param {number} pointerY - The y-coordinate of the pointer (mouse) position.
+     * @returns {boolean} - Returns `true` if the pointer is inside the circle, `false` otherwise.
+     */
     isShapeSelected(pointerX,pointerY)
     {
         const distance = Math.sqrt(Math.pow(pointerX - this.#centerX, 2) + Math.pow(pointerY - this.#centerY, 2));
@@ -87,6 +139,9 @@ class Circle
     }
 }
 
+/**
+ * Represents a square shape that can be drawn on a canvas.
+ */
 class Square
 {
     #x;
@@ -97,6 +152,12 @@ class Square
     #canvasWidth;
     #canvasHeigth;
 
+    /**
+     * Creates a new Square object with random position and predefined size and stroke.
+     * 
+     * @param {number} canvasWidth - The width of the canvas where the square will be drawn.
+     * @param {number} canvasHeight - The height of the canvas where the square will be drawn.
+     */
     constructor(canvasWidth,canvasHeight)
     {
         this.#size = canvas.width * 0.1; 
@@ -108,6 +169,12 @@ class Square
         this.#strokeColor=generateUniqueRandomColor();
     }
 
+     /**
+     * Draws the square on the given canvas context.
+     * The square is filled with a semi-transparent white color and has a defined stroke color and width.
+     * 
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context on which to draw the square.
+     */
     drawShape(ctx)
     {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'; 
@@ -125,6 +192,14 @@ class Square
         ctx.strokeRect(this.#x, this.#y, this.#size, this.#size);  
     }
 
+     /**
+     * Checks if the shape is selected based on a given pointer (mouse) position.
+     * 
+     * @param {number} pointerX - The x-coordinate of the pointer (mouse) position.
+     * @param {number} pointerY - The y-coordinate of the pointer (mouse) position.
+     * @returns {boolean} - Returns `true` if the pointer is inside the square, `false` otherwise.
+     */
+
     isShapeSelected(pointerX,pointerY)
     {
         return pointerX >= this.#x && pointerX <= this.#x + this.#size &&
@@ -132,6 +207,13 @@ class Square
 
     }
 
+    /**
+     * Checks wether the square is within the canvas or not
+     * 
+     * @param {number} x - The x-coordinate of the point to check.
+     * @param {number} y - The y-coordinate of the point to check.
+     * @returns {boolean} - Returns `true` if the square is inside the canvas, `false` otherwise.
+     */
     isSquarePossible(x,y)
     {
         if (x >= 0 && 
@@ -143,6 +225,13 @@ class Square
         return false;
     }
 
+    
+    /**
+     * Sets the square new coordinates (x, y), if the new coordinates are valid.
+     * 
+     * @param {number} x - The new x-coordinate for the square.
+     * @param {number} y - The new y-coordinate for the square.
+     */
     setShapeCoordinate(x,y)
     {
         if(this.isSquarePossible(x,y))
@@ -152,11 +241,21 @@ class Square
         }
     }
     
+    /**
+     * Gets the x-coordinate of the square.
+     * 
+     * @returns {number} - The x-coordinate of the square.
+     */
     getCoordinateX()
     {
         return this.#x; 
     }
 
+    /**
+     * Gets the y-coordinate of the square.
+     * 
+     * @returns {number} - The y-coordinate of the square.
+     */
     getCoordinateY()
     {
         return this.#y; 
