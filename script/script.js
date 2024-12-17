@@ -35,6 +35,11 @@ var selectedShape = null;
 var moveListner = null;
 
 /**
+ * to add the objects which have to be remove
+ */
+var shapeToDelete = [];
+
+/**
  * Event listener for the image file input change event.
  */
 imageFile.addEventListener('change',selectImage);
@@ -306,17 +311,28 @@ function drawShapesOnCanvas() {
 
 }
 
-function removeShape()
-{
-    if(selectedShape!==null)
-    {
+/**
+ * Removes the selected shape from the canvas after a delay.
+ * The shape will be marked for removal and deleted from the shape array
+ * after a 60-second delay. This delay is useful for animating the removal.
+ */
+function removeShape() {
+    if (selectedShape !== null) {
         console.log('selected');
-        shapes[shapes.length-1].isRemove = true;
+        selectedShape.isRemove = true;
+        shapeToDelete.push(selectedShape); 
         redrawShapes();
-      setTimeout(()=>{
-            shapes.splice(shapes.length-1,1);
-            selectedShape=null;
-            redrawShapes();
-        },5000)
+        
+        shapeToDelete.forEach(shape => {
+            setTimeout(() => {
+                const index = shapes.indexOf(shape);
+                if (index > -1) {
+                    shapes.splice(index, 1); 
+                }
+                redrawShapes(); 
+            }, 60000);
+        });
+
+        shapeToDelete = [];
     }
 }

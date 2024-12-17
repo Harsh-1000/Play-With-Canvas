@@ -2,7 +2,7 @@
  * use to store unique color code
  */
 const shapeColorSet = new Set();
-var removeImg ='./img/sign.png';
+var removeImg ='./img/death.png';
 /**
  * it generate and return the unique color code
  * @returns color code
@@ -69,12 +69,17 @@ class Circle
         }
     }
 
+     /**
+     * to draw the image on the shape
+     * 
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context on which to draw the image.
+     */
     drawImage(ctx)
     {
         const image = new Image();
         image.src = removeImg;
-        const imgWidth = this.#radius * 1.2;  // Width of the image to match the circle
-        const imgHeight = this.#radius * 1.2; // Height of the image to match the circle
+        const imgWidth = this.#radius * 1.2;  
+        const imgHeight = this.#radius * 1.2; 
         console.log(image);
         ctx.drawImage(image, this.#centerX - imgWidth / 2, this.#centerY - imgHeight / 2, imgWidth, imgHeight);
     }
@@ -206,6 +211,27 @@ class Square
         ctx.strokeStyle = this.#strokeColor;  
         ctx.lineWidth = this.#lineWidth;  
         ctx.strokeRect(this.#x, this.#y, this.#size, this.#size);  
+
+        if(this.isRemove) {
+            this.drawImage(ctx);
+        }
+    }
+
+    /**
+     * to draw the image on the shape
+     * 
+     * @param {CanvasRenderingContext2D} ctx - The canvas rendering context on which to draw the image.
+     */
+    drawImage(ctx)
+    {
+        const image = new Image();
+        image.src = removeImg;
+        const imgWidth = this.#size/1.4;  
+        const imgHeight = this.#size/1.4; 
+        const imgX = this.#x + (this.#size - imgWidth) / 2;
+        const imgY = this.#y + (this.#size - imgHeight) / 2;
+
+        ctx.drawImage(image, imgX, imgY, imgWidth, imgHeight);
     }
 
      /**
