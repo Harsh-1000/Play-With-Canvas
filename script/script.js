@@ -11,6 +11,7 @@ const drawCircle = document.getElementById('draw-circle');
 const drawSquare = document.getElementById('draw-square');
 const canvasImg = document.getElementById('canvas-img');
 const clearCanvasArea = document.getElementById('clear-canvas');
+const destroyShape = document.getElementById('destroy-shape');
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -104,6 +105,11 @@ window.addEventListener('resize', () =>
     });
 
 /**
+* Event listener to remove the shape on click event
+*/
+destroyShape.addEventListener('click',removeShape);
+
+/**
  * selectImage to get the input image url and set in the selected image src
  */
 function selectImage()
@@ -145,7 +151,7 @@ function getPointerCoordinate(event)
         console.log(shape);
         console.log(`Canvas Width: ${canvas.width}, Canvas Height: ${canvas.height}`);
         console.log(`Mouse Clicked at: x = ${x}, y = ${y}`);
-        if (shape.isShapeSelected(x,y)) {
+        if (shape.isShapeSelected(x,y,ctx)) {
             shapes.splice(i,1);
             shapes.push(shape);
             selectedShape = shape;
@@ -291,9 +297,26 @@ function redrawShapes() {
 /**
  * it draw the shapes on the canvas using shapes array
  */
+
 function drawShapesOnCanvas() {
+
     shapes.forEach(shape =>{
         shape.drawShape(ctx);
     })
 
+}
+
+function removeShape()
+{
+    if(selectedShape!==null)
+    {
+        console.log('selected');
+        shapes[shapes.length-1].isRemove = true;
+        redrawShapes();
+      setTimeout(()=>{
+            shapes.splice(shapes.length-1,1);
+            selectedShape=null;
+            redrawShapes();
+        },5000)
+    }
 }

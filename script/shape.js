@@ -2,7 +2,7 @@
  * use to store unique color code
  */
 const shapeColorSet = new Set();
-
+var removeImg ='./img/sign.png';
 /**
  * it generate and return the unique color code
  * @returns color code
@@ -29,7 +29,8 @@ class Circle
     #strokeColor;
     #centerX;
     #centerY;
-
+    isRemove;
+ 
     /**
      * Creates a new Circle object with random position and predefined size and stroke.
      * 
@@ -42,7 +43,7 @@ class Circle
         this.#lineWidth = canvas.width * 0.007; 
         this.#centerX = Math.floor(Math.random() * (canvasWidth - 2 * this.#radius)) + this.#radius;
         this.#centerY = Math.floor(Math.random() * (canvasHeight - 2 * this.#radius)) + this.#radius;
-    
+        this.isRemove = false;
         this.#strokeColor=generateUniqueRandomColor();
     }
 
@@ -52,9 +53,9 @@ class Circle
      * 
      * @param {CanvasRenderingContext2D} ctx - The canvas rendering context on which to draw the circle.
      */
+    
     drawShape(ctx)
     {
-       
         ctx.beginPath();
         console.log("x = " + this.#centerX + "   y = " +   this.#centerY );
         ctx.arc(this.#centerX,this.#centerY,this.#radius,0,2*Math.PI);
@@ -63,6 +64,19 @@ class Circle
         ctx.strokeStyle = this.#strokeColor;
         ctx.lineWidth = this.#lineWidth;
         ctx.stroke();
+        if(this.isRemove) {
+            this.drawImage(ctx);
+        }
+    }
+
+    drawImage(ctx)
+    {
+        const image = new Image();
+        image.src = removeImg;
+        const imgWidth = this.#radius * 1.2;  // Width of the image to match the circle
+        const imgHeight = this.#radius * 1.2; // Height of the image to match the circle
+        console.log(image);
+        ctx.drawImage(image, this.#centerX - imgWidth / 2, this.#centerY - imgHeight / 2, imgWidth, imgHeight);
     }
 
      /**
@@ -126,7 +140,7 @@ class Circle
      * @param {number} pointerY - The y-coordinate of the pointer (mouse) position.
      * @returns {boolean} - Returns `true` if the pointer is inside the circle, `false` otherwise.
      */
-    isShapeSelected(pointerX,pointerY)
+    isShapeSelected(pointerX,pointerY,ctx)
     {
         const distance = Math.sqrt(Math.pow(pointerX - this.#centerX, 2) + Math.pow(pointerY - this.#centerY, 2));
 
@@ -151,6 +165,7 @@ class Square
     #strokeColor;
     #canvasWidth;
     #canvasHeigth;
+    isRemove;
 
     /**
      * Creates a new Square object with random position and predefined size and stroke.
@@ -167,6 +182,7 @@ class Square
         this.#x = Math.floor(Math.random() * (canvasWidth - this.#size)); 
         this.#y = Math.floor(Math.random() * (canvasHeight - this.#size));
         this.#strokeColor=generateUniqueRandomColor();
+        this.isRemove = false;
     }
 
      /**

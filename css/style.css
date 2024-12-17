@@ -164,13 +164,15 @@ canvas
     justify-content: space-between;
     flex-direction: column;
     padding: 20px;
+    gap: 10px;
 }
 
 .canvas-button
 {
-    width: 120px;
-    height: 100px;
+    width: 100px;
+    height: 90px;
     background:none;
+    background-color: rgba(0, 0, 0, 0.7); 
 }
 
 .canvas-button img
